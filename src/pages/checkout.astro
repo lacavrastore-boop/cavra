@@ -6,9 +6,10 @@ export const prerender = false;
 ---
 
 <Base title="Pagar | Cavra" description="Datos de envío y pago de tu pedido en Cavra.">
-  <section class="px-5 pb-28 pt-28 md:px-10 md:pt-36">
-    <div class="mx-auto max-w-5xl">
-      <h1 class="text-[clamp(4rem,14vw,10rem)] leading-[0.85]">Pagar</h1>
+  <section class="relative overflow-x-clip px-5 pb-28 pt-28 md:px-10 md:pt-36">
+    <p aria-hidden="true" class="contorno pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 select-none whitespace-nowrap font-display text-[clamp(10rem,38vw,34rem)] leading-none text-negro/15">CAVRA</p>
+    <div class="relative mx-auto max-w-6xl">
+      <h1 class="text-[clamp(4.5rem,15vw,11rem)] leading-[0.85]">Casi tuya.</h1>
       <CheckoutForm client:load />
     </div>
   </section>
