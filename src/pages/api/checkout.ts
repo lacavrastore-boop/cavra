@@ -23,12 +23,12 @@ const Body = z.object({
       z.object({
         slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(60),
         color: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(40),
-        size: z.string().min(1).max(10),
-        qty: z.number().int().min(1).max(10),
+        size: z.string().min(1, 'Talla no válida').max(10, 'Talla no válida'),
+        qty: z.number().int().min(1, 'Cantidad no válida').max(10, 'Máximo 10 unidades por prenda'),
       }),
     )
     .min(1, 'Tu carrito está vacío')
-    .max(20),
+    .max(20, 'Tu carrito tiene demasiadas prendas'),
   acceptTerms: z.literal(true, { error: 'Debes aceptar las políticas para continuar' }),
 });
 
