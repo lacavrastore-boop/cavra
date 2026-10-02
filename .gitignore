@@ -23,3 +23,7 @@ Thumbs.db
 
 # imágenes y workflows de ComfyUI (mocks)
 .comfy/
+
+# herramientas de diseño (se reinstalan con skills-lock.json)
+.claude/
+.impeccable/
