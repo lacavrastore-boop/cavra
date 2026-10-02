@@ -30,7 +30,7 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
-  <body>
+  <body class="flex min-h-screen flex-col">
     <a
       href="#contenido"
       class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-negro focus:px-5 focus:py-3 focus:text-papel"
@@ -38,7 +38,7 @@ const {
       Saltar al contenido
     </a>
     <SiteHeader />
-    <main id="contenido">
+    <main id="contenido" class="grow">
       <slot />
     </main>
     <SiteFooter />

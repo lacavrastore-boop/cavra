@@ -22,7 +22,7 @@ export default function CheckoutForm() {
     return (
       <div className="mt-10 rounded-md border-2 border-negro p-6" role="status">
         <p className="etiqueta text-texto-suave">Pedido creado</p>
-        <p className="mt-1 text-6xl">{pedido.reference}</p>
+        <p className="mt-1 font-display text-6xl">{pedido.reference}</p>
         <p className="mt-3">Total a pagar: <strong>{formatCOP(pedido.total)}</strong></p>
         <p className="mt-3 text-texto-suave">El pago con Wompi se activa en el siguiente paso.</p>
       </div>
