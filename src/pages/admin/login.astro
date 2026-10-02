@@ -1,0 +1,60 @@
+---
+import '@fontsource/bebas-neue/latin-400.css';
+import '@fontsource-variable/montserrat/wght.css';
+import '../../styles/global.css';
+
+export const prerender = false;
+
+const supabase = Astro.locals.supabase!;
+let error = Astro.url.searchParams.get('error') === 'permiso' ? 'Esa cuenta no tiene acceso al panel.' : '';
+
+if (Astro.request.method === 'POST') {
+  const form = await Astro.request.formData();
+  const email = String(form.get('email') ?? '').trim();
+  const password = String(form.get('password') ?? '');
+  const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+  if (err) {
+    error = 'Correo o contraseña incorrectos.';
+  } else {
+    const { data: esAdmin } = await supabase.rpc('is_admin');
+    if (esAdmin === true) return Astro.redirect('/admin', 303);
+    await supabase.auth.signOut();
+    error = 'Esa cuenta no tiene acceso al panel.';
+  }
+} else {
+  const { data } = await supabase.auth.getUser();
+  if (data.user) {
+    const { data: esAdmin } = await supabase.rpc('is_admin');
+    if (esAdmin === true) return Astro.redirect('/admin', 303);
+  }
+}
+---
+
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Entrar | Panel Cavra</title>
+  </head>
+  <body class="grid min-h-screen place-items-center bg-papel px-4">
+    <main class="w-full max-w-sm">
+      <h1 class="text-6xl">Panel</h1>
+      <p class="mt-2 text-texto-suave">Cavra · acceso del administrador</p>
+      <form method="post" class="mt-8 space-y-5" novalidate>
+        <label class="block">
+          <span class="etiqueta">Correo</span>
+          <input name="email" type="email" required autocomplete="username" autofocus class="mt-2 block min-h-12 w-full rounded-md border-2 border-negro bg-blanco px-4" />
+        </label>
+        <label class="block">
+          <span class="etiqueta">Contraseña</span>
+          <input name="password" type="password" required autocomplete="current-password" class="mt-2 block min-h-12 w-full rounded-md border-2 border-negro bg-blanco px-4" />
+        </label>
+        {error && <p role="alert" class="rounded-md border-2 border-oxido px-4 py-3 text-oxido">{error}</p>}
+        <button type="submit" class="btn w-full">Entrar</button>
+      </form>
+    </main>
+  </body>
+</html>

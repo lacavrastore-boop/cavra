@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+
+export const prerender = false;
+const email = Astro.locals.user?.email;
+---
+
+<Admin title="Inicio" active="inicio">
+  <h1 class="text-6xl md:text-7xl">Inicio</h1>
+  <p class="mt-3 text-texto-suave">Sesión: {email}</p>
+</Admin>
