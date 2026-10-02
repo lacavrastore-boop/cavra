@@ -153,7 +153,7 @@ export default function CheckoutForm() {
       <aside className="order-first lg:sticky lg:top-28 lg:order-last lg:self-start" style={entra(1)}>
         <div className="rounded-3xl bg-blanco p-6 shadow-[0_30px_60px_-30px_rgba(17,17,17,0.3)] md:p-8">
           <h2 className="font-display text-5xl leading-[0.9]">Tu pedido</h2>
-          <ul className="mt-6 divide-y divide-linea">
+          <ul className="mt-6 max-h-72 divide-y divide-linea overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin] lg:max-h-[calc(100vh-30rem)] lg:min-h-48">
             {items.map((i) => (
               <li key={`${i.slug}-${i.color}-${i.size}`} className="flex items-center gap-4 py-4 first:pt-0">
                 <div className="relative size-20 shrink-0 rounded-2xl bg-tile overflow-hidden">
