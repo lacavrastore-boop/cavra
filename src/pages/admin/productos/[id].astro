@@ -38,5 +38,19 @@ const initial = {
 <Admin title={p.name} active="productos">
   <a href="/admin/productos" class="etiqueta text-texto-suave hover:text-negro">← Productos</a>
   <h1 class="mb-10 mt-3 text-6xl md:text-7xl">{p.name}</h1>
+  {Astro.url.searchParams.get('error') && (
+    <p role="alert" class="mb-6 rounded-md border-2 border-oxido p-3 text-oxido">{Astro.url.searchParams.get('error')}</p>
+  )}
   <ProductEditor client:load initial={initial} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL} />
+
+  <section class="mt-16 border-t-2 border-negro pt-6">
+    <h2 class="text-3xl">Eliminar producto</h2>
+    <p class="mt-2 text-texto-suave">
+      Solo se puede eliminar si nunca se ha vendido. Si ya tiene pedidos, cámbialo a "Archivado".
+    </p>
+    <form method="post" action={`/api/admin/products/${p.id}/delete`} class="mt-4 space-y-3">
+      <label class="flex items-center gap-2"><input type="checkbox" name="confirmar" required /> Sí, eliminar "{p.name}" para siempre</label>
+      <button type="submit" class="btn">Eliminar</button>
+    </form>
+  </section>
 </Admin>
