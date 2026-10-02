@@ -33,7 +33,7 @@ export default function CheckoutForm() {
     return (
       <div className="mt-10">
         <p className="font-display text-4xl uppercase">Tu carrito está vacío.</p>
-        <a href="/tienda" className="btn mt-5 inline-block">Ver la tienda</a>
+        <a href="/tienda" className="btn mt-5">Ver la tienda</a>
       </div>
     );
   }

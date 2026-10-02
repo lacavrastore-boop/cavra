@@ -131,7 +131,7 @@ export default function CartDrawer() {
                     <span>Envío</span>
                     <span className="tabular-nums">{formatCOP(SHIPPING_COP)}</span>
                   </div>
-                  <a href="/checkout" className="btn mt-5 block w-full text-center">
+                  <a href="/checkout" className="btn mt-5 flex w-full">
                     Ir a pagar
                   </a>
                 </footer>
