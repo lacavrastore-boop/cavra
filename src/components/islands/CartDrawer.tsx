@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Minus, Plus, X } from 'lucide-react';
 import { cartCount, onCartChange, readCart, setQty, type CartItem } from '@/lib/cart';
 import { formatCOP } from '@/lib/money';
+import { SHIPPING_COP } from '@/lib/shipping';
 
 export default function CartDrawer() {
   const [open, setOpen] = useState(false);
@@ -128,12 +129,11 @@ export default function CartDrawer() {
                   </div>
                   <div className="mt-1 flex justify-between text-sm text-texto-suave">
                     <span>Envío</span>
-                    <span>Se calcula al pagar</span>
+                    <span className="tabular-nums">{formatCOP(SHIPPING_COP)}</span>
                   </div>
-                  <button className="btn mt-5 w-full" disabled>
-                    Pagar con Wompi
-                  </button>
-                  <p className="mt-3 text-center text-xs text-texto-suave">El pago se activa en la fase de checkout.</p>
+                  <a href="/checkout" className="btn mt-5 block w-full text-center">
+                    Ir a pagar
+                  </a>
                 </footer>
               </>
             )}
