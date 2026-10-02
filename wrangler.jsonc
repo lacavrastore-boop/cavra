@@ -1,0 +1,11 @@
+{
+  // Despliegue en Cloudflare (Workers con archivos estáticos). Por ahora el sitio es estático:
+  // se publica la carpeta dist. Cuando se agregue el adaptador de Cloudflare (fase de pagos),
+  // este archivo se reemplaza por el que genera `npx astro add cloudflare`.
+  "name": "cavra",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}

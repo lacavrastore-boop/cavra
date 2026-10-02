@@ -1,0 +1,74 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductCard from '../../components/ProductCard.astro';
+import { activeProducts, CATEGORIES, CURRENT_DROP } from '../../data/products';
+
+const lista = activeProducts();
+const cats = CATEGORIES.filter((c) => lista.some((p) => p.category === c.key));
+---
+
+<Base title="Tienda | Cavra" description="Todas las prendas del drop actual de Cavra.">
+  <section class="px-5 pb-28 pt-28 md:px-10 md:pt-36">
+    <div class="mx-auto max-w-[1500px]">
+      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <h1 class="text-[clamp(5rem,18vw,15rem)] leading-[0.8]" data-reveal>Tienda</h1>
+      </div>
+
+      <div class="sticky top-3 z-40 mt-10 flex gap-2 overflow-x-auto pb-2 md:top-5" role="toolbar" aria-label="Filtrar por tipo">
+        <button type="button" data-filtro="todo" aria-pressed="true" class="filtro">Todo</button>
+        <button type="button" data-filtro={`drop-${CURRENT_DROP.number}`} aria-pressed="false" class="filtro">{CURRENT_DROP.label}</button>
+        {cats.map((c) => <button type="button" data-filtro={c.key} aria-pressed="false" class="filtro">{c.label}</button>)}
+      </div>
+
+      <ul class="mt-8 grid grid-cols-2 gap-x-3 gap-y-12 md:gap-x-5 lg:grid-cols-3 xl:grid-cols-4" data-lista>
+        {lista.map((p, i) => <li data-cat={p.category} data-drop={`drop-${p.drop}`}><ProductCard product={p} i={i} /></li>)}
+      </ul>
+      <p data-vacio hidden class="mt-10 font-display text-4xl uppercase">Nada por aquí en este drop.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .filtro {
+    flex-shrink: 0;
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    border: 2px solid var(--negro);
+    background: var(--papel);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    transition: transform 150ms var(--ease-out), background-color 200ms var(--ease-out), color 200ms var(--ease-out);
+  }
+  .filtro:active {
+    transform: scale(0.96);
+  }
+  .filtro[aria-pressed='true'] {
+    background: var(--negro);
+    color: var(--papel);
+  }
+</style>
+
+<script>
+  const botones = document.querySelectorAll<HTMLButtonElement>('[data-filtro]');
+  const items = document.querySelectorAll<HTMLElement>('[data-lista] > li');
+  const vacio = document.querySelector<HTMLElement>('[data-vacio]');
+  function aplicar(cat: string) {
+    let n = 0;
+    items.forEach((li) => {
+      const ver = cat === 'todo' || li.dataset.cat === cat || li.dataset.drop === cat;
+      li.hidden = !ver;
+      if (ver) n++;
+    });
+    botones.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filtro === cat)));
+    if (vacio) vacio.hidden = n > 0;
+  }
+  botones.forEach((b) => b.addEventListener('click', () => {
+    aplicar(b.dataset.filtro!);
+    history.replaceState(null, '', b.dataset.filtro === 'todo' ? location.pathname : `#${b.dataset.filtro}`);
+  }));
+  const inicial = location.hash.slice(1);
+  if (inicial && document.querySelector(`[data-filtro="${inicial}"]`)) aplicar(inicial);
+</script>

@@ -1,0 +1,50 @@
+---
+import '@fontsource/bebas-neue/latin-400.css';
+import '@fontsource-variable/montserrat/wght.css';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import CartDrawer from '../components/islands/CartDrawer';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Cavra | El goat no, la cabra',
+  description = 'Cavra: ropa streetwear hecha en Colombia. Calle pero elegante.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#FBF5EE" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:locale" content="es_CO" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a
+      href="#contenido"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-full focus:bg-negro focus:px-5 focus:py-3 focus:text-papel"
+    >
+      Saltar al contenido
+    </a>
+    <SiteHeader />
+    <main id="contenido">
+      <slot />
+    </main>
+    <SiteFooter />
+    <CartDrawer client:idle />
+    <script>
+      import '../scripts/motion.ts';
+    </script>
+  </body>
+</html>

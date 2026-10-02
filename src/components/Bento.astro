@@ -1,0 +1,50 @@
+---
+const tile =
+  'group relative block overflow-hidden rounded-xl bg-tile focus-visible:outline-offset-4';
+const img =
+  'absolute inset-[-8%] h-[116%] w-[116%] max-w-none object-cover';
+const zoom = 'absolute inset-0 transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] group-hover:scale-[1.04]';
+const pill = 'etiqueta absolute rounded-full bg-papel px-4 py-2.5 text-negro';
+---
+
+<section class="px-5 pb-6 pt-8 md:px-10 md:pb-8 md:pt-10" aria-labelledby="nuevo">
+  <div class="mx-auto max-w-[1500px]">
+    <div class="mb-8 flex items-end justify-between gap-6 md:mb-10">
+      <h2 id="nuevo" class="text-[clamp(2.5rem,8vw,6.5rem)] leading-[0.85]" data-reveal>Lo nuevo</h2>
+    </div>
+
+    <div class="grid auto-rows-[46vw] grid-cols-2 gap-3 md:auto-rows-[21vw] md:grid-cols-4 md:gap-4 xl:auto-rows-[19rem]">
+      <!-- A: grande -->
+      <a href="/producto/buzo-la-cabra" class={`${tile} col-span-2 row-span-2`} data-reveal>
+        <div class={zoom}><img data-speed="0.08" class={img} src="/img/life/hoodie.webp" alt="Chico con buzo negro en una calle de colores de Bogotá" loading="lazy" /></div>
+        <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-negro/70 to-transparent"></div>
+        <div class="absolute bottom-5 left-5 right-5 text-papel md:bottom-8 md:left-8">
+          <p class="etiqueta">Drop 01</p>
+          <p class="mt-2 font-display text-5xl uppercase leading-[0.9] md:text-7xl">Buzo<br />La Cabra</p>
+        </div>
+        <span class={`${pill} right-5 top-5 md:right-8 md:top-8`}>Ver buzo</span>
+      </a>
+
+      <!-- B: accesorios -->
+      <a href="/tienda#accesorios" class={`${tile} col-span-2`} data-reveal style="--i:1">
+        <div class={zoom}><img data-speed="0.06" class={img} src="/img/life/cap.webp" alt="Chico de perfil con gorra café frente a una pared azul" loading="lazy" /></div>
+        <p class="absolute left-5 top-5 font-display text-5xl uppercase leading-none text-negro md:left-8 md:top-7 md:text-7xl">Accesorios</p>
+        <span class={`${pill} bottom-5 left-5 md:bottom-7 md:left-8`}>Ver gorras</span>
+      </a>
+
+      <!-- C: cargos -->
+      <a href="/producto/cargo-calle" class={tile} data-reveal style="--i:2">
+        <div class={zoom}><img data-speed="0.07" class={img} src="/img/life/pants.webp" alt="Chico cruzando la calle con pantalón cargo oliva" loading="lazy" /></div>
+        <span class={`${pill} bottom-4 left-4`}>Cargos</span>
+      </a>
+
+      <!-- D: texto -->
+      <div class="relative flex flex-col justify-between overflow-hidden rounded-xl bg-oxido p-5 text-papel md:p-7" data-reveal style="--i:3">
+        <img src="/img/huella.svg" alt="" class="h-10 w-auto self-start brightness-0 invert" />
+        <p class="font-display text-[clamp(1.6rem,3vw,3rem)] uppercase leading-[0.9]">
+          Pocas prendas. Cuando se acaban, se acaban.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

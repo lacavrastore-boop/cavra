@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductStage from '../../components/islands/ProductStage';
+import ProductCard from '../../components/ProductCard.astro';
+import { activeProducts, getProduct } from '../../data/products';
+
+export function getStaticPaths() {
+  return activeProducts().map((p) => ({ params: { slug: p.slug } }));
+}
+
+const product = getProduct(Astro.params.slug!)!;
+const otros = activeProducts().filter((p) => p.slug !== product.slug).slice(0, 3);
+---
+
+<Base title={`${product.name} | Cavra`} description={product.description}>
+  <ProductStage client:load product={product} />
+
+  <section class="mx-auto grid max-w-[1500px] gap-10 px-5 py-20 md:grid-cols-3 md:px-10 md:py-28">
+    <div>
+      <h2 class="text-5xl">Detalles</h2>
+      <ul class="mt-5 space-y-2">
+        {product.details.map((d) => <li class="border-b border-linea pb-2">{d}</li>)}
+      </ul>
+    </div>
+    <div id="guia-tallas" class="scroll-mt-24">
+      <h2 class="text-5xl">Guía de tallas</h2>
+      <p class="mt-5 text-texto-suave">
+        Las medidas reales se publican cuando esté lista la producción del drop. Si dudas entre dos tallas, en esta prenda
+        elige la tuya de siempre: el corte ya es amplio.
+      </p>
+    </div>
+    <div>
+      <h2 class="text-5xl">Envíos y cambios</h2>
+      <p class="mt-5 text-texto-suave">Enviamos a toda Colombia. Tiempos, costos y condiciones de cambio se publican antes del lanzamiento.</p>
+    </div>
+  </section>
+
+  <section class="px-5 pb-28 md:px-10" aria-labelledby="mas">
+    <div class="mx-auto max-w-[1500px]">
+      <h2 id="mas" class="border-t-2 border-negro pt-6 text-[clamp(3rem,8vw,6rem)]">Del mismo drop</h2>
+      <ul class="mt-10 grid grid-cols-2 gap-x-3 gap-y-12 md:gap-x-5 lg:grid-cols-3">
+        {otros.map((p, i) => <li><ProductCard product={p} i={i} /></li>)}
+      </ul>
+    </div>
+  </section>
+</Base>

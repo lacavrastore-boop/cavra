@@ -1,0 +1,28 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="on-dark relative overflow-hidden bg-negro text-papel">
+  <div class="mx-auto grid max-w-[1500px] gap-12 px-5 pb-14 pt-20 md:grid-cols-[1.4fr_1fr_1fr] md:px-10">
+    <p class="font-display text-5xl uppercase leading-[0.9] md:text-7xl">
+      <span class="text-arena">Calle pero elegante.</span>
+    </p>
+    <nav aria-label="Tienda" class="flex flex-col gap-1">
+      <p class="etiqueta mb-3 text-arena">Tienda</p>
+      <a href="/tienda" class="py-1.5 hover:underline">Todo el drop</a>
+      <a href="/tienda#buzos" class="py-1.5 hover:underline">Buzos</a>
+      <a href="/tienda#camisetas" class="py-1.5 hover:underline">Camisetas</a>
+      <a href="/tienda#accesorios" class="py-1.5 hover:underline">Accesorios</a>
+    </nav>
+    <nav aria-label="Ayuda" class="flex flex-col gap-1">
+      <p class="etiqueta mb-3 text-arena">Ayuda</p>
+      <span class="py-1.5 text-papel/60">Envíos (pronto)</span>
+      <span class="py-1.5 text-papel/60">Cambios y devoluciones (pronto)</span>
+      <span class="py-1.5 text-papel/60">Tratamiento de datos (pronto)</span>
+    </nav>
+  </div>
+  <div class="mx-auto flex max-w-[1500px] flex-col gap-4 border-t border-papel/15 px-5 py-6 md:flex-row md:items-center md:justify-between md:px-10">
+    <img src="/brand/logo-crema.svg" alt="Cavra" class="h-7 w-auto self-start" width="112" height="28" />
+    <p class="text-xs tracking-[0.1em] text-papel/60">© {year} Cavra. El goat no, la cabra.</p>
+  </div>
+</footer>

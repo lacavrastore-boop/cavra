@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroCabra from '../components/islands/HeroCabra';
+import Bento from '../components/Bento.astro';
+import ProductCarousel from '../components/islands/ProductCarousel';
+import Collage from '../components/Collage.astro';
+import { activeProducts } from '../data/products';
+
+const items = activeProducts().map((p) => ({
+  slug: p.slug,
+  name: p.name,
+  tagline: p.tagline,
+  description: p.description,
+  price_cop: p.price_cop,
+  image: p.colors[0].front,
+  stage: p.colors[0].stage,
+}));
+---
+
+<Base>
+  <HeroCabra client:load />
+  <Bento />
+
+  <section id="drop" class="scroll-mt-20 px-5 py-6 md:px-10 md:py-8" aria-labelledby="tienda-t">
+    <div class="mx-auto max-w-[1500px]">
+      <div class="border-t-2 border-negro pt-6 md:pt-8">
+        <ProductCarousel client:visible items={items} />
+      </div>
+    </div>
+  </section>
+
+  <Collage />
+</Base>
