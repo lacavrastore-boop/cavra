@@ -156,8 +156,8 @@ export default function CheckoutForm() {
           <ul className="mt-6 divide-y divide-linea">
             {items.map((i) => (
               <li key={`${i.slug}-${i.color}-${i.size}`} className="flex items-center gap-4 py-4 first:pt-0">
-                <div className="grid size-20 shrink-0 place-items-center rounded-2xl bg-tile p-2">
-                  <img src={i.image} alt="" className="max-h-full w-auto" />
+                <div className="relative size-20 shrink-0 rounded-2xl bg-tile overflow-hidden">
+                  <img src={i.image} alt="" className="absolute inset-2 size-[calc(100%-1rem)] object-contain" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="etiqueta">{i.name}</p>

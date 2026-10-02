@@ -89,8 +89,8 @@ export default function CartDrawer() {
                 <ul className="flex-1 divide-y divide-linea overflow-y-auto px-6">
                   {items.map((i) => (
                     <li key={`${i.slug}-${i.color}-${i.size}`} className="flex gap-4 py-5">
-                      <div className="grid size-24 shrink-0 place-items-center rounded-md bg-tile p-2">
-                        <img src={i.image} alt="" className="max-h-full w-auto" />
+                      <div className="relative size-24 shrink-0 rounded-md bg-tile overflow-hidden">
+                        <img src={i.image} alt="" className="absolute inset-2 size-[calc(100%-1rem)] object-contain" />
                       </div>
                       <div className="flex flex-1 flex-col">
                         <p className="etiqueta">{i.name}</p>
