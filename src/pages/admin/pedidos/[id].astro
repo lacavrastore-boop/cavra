@@ -1,0 +1,111 @@
+---
+import Admin from '../../../layouts/Admin.astro';
+import { formatCOP } from '../../../lib/money';
+import { ESTADOS_PEDIDO, claseEstado, fechaCO } from '../../../lib/orders';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+if (!id || !/^[0-9a-f-]{36}$/i.test(id)) return new Response('No encontrado', { status: 404 });
+
+const { data: p, error } = await Astro.locals.supabase!
+  .from('orders')
+  .select('*, order_items(*)')
+  .eq('id', id)
+  .maybeSingle();
+if (error) throw new Error(error.message);
+if (!p) return new Response('No encontrado', { status: 404 });
+
+const aviso = Astro.url.searchParams.get('error');
+const ok = Astro.url.searchParams.get('ok');
+const campo = 'w-full rounded-md border-2 border-negro bg-blanco px-3 py-2';
+---
+
+<Admin title={`Pedido ${p.reference}`} active="pedidos">
+  <a href="/admin/pedidos" class="etiqueta text-texto-suave">← Pedidos</a>
+  <div class="mt-3 flex flex-wrap items-center gap-3">
+    <h1 class="text-5xl md:text-6xl">{p.reference}</h1>
+    <span class:list={['etiqueta rounded-full border-2 px-3 py-1', claseEstado(p.status)]}>{ESTADOS_PEDIDO[p.status]}</span>
+  </div>
+  <p class="mt-2 text-texto-suave">Creado {fechaCO(p.created_at)}{p.paid_at && ` · Pagado ${fechaCO(p.paid_at)}`}</p>
+
+  {aviso && <p role="alert" class="mt-4 rounded-md border-2 border-oxido p-3 text-oxido">{aviso}</p>}
+  {ok && <p role="status" class="mt-4 rounded-md border-2 border-oliva p-3 text-oliva">Listo, se guardó el cambio.</p>}
+  {p.notes && (
+    <div class="mt-4 rounded-md border-2 border-oxido bg-blanco p-3">
+      <p class="etiqueta text-oxido">Notas internas</p>
+      <p class="mt-1 whitespace-pre-line">{p.notes}</p>
+    </div>
+  )}
+
+  <div class="mt-8 grid gap-8 md:grid-cols-2">
+    <section>
+      <h2 class="text-3xl">Cliente</h2>
+      <p class="mt-2 font-bold">{p.customer_name}</p>
+      <p><a class="underline" href={`mailto:${p.customer_email}`}>{p.customer_email}</a></p>
+      {p.customer_phone && <p>{p.customer_phone}</p>}
+      <h2 class="mt-6 text-3xl">Envío</h2>
+      <p class="mt-2">{p.shipping_address}</p>
+      <p>{p.shipping_city}{p.shipping_department && `, ${p.shipping_department}`}</p>
+      {p.shipping_notes && <p class="mt-1 text-texto-suave">{p.shipping_notes}</p>}
+      {p.carrier && <p class="mt-3">Transportadora: <strong>{p.carrier}</strong> · Guía: <strong>{p.tracking_code}</strong></p>}
+    </section>
+
+    <section>
+      <h2 class="text-3xl">Productos</h2>
+      <ul class="mt-2 divide-y divide-linea border-y-2 border-negro">
+        {p.order_items.map((i: any) => (
+          <li class="flex justify-between gap-4 py-3">
+            <span>{i.quantity} × {i.product_name} <span class="text-texto-suave">· {i.color} · {i.size}</span></span>
+            <span>{formatCOP(i.unit_price_cop * i.quantity)}</span>
+          </li>
+        ))}
+      </ul>
+      <dl class="mt-3 space-y-1 text-right">
+        <div class="flex justify-between"><dt>Subtotal</dt><dd>{formatCOP(p.subtotal_cop)}</dd></div>
+        <div class="flex justify-between"><dt>Envío</dt><dd>{formatCOP(p.shipping_cop)}</dd></div>
+        <div class="flex justify-between text-xl font-bold"><dt>Total</dt><dd>{formatCOP(p.total_cop)}</dd></div>
+      </dl>
+      <p class="mt-4 text-sm text-texto-suave">
+        Wompi: {p.wompi_status ?? 'sin respuesta todavía'}{p.wompi_transaction_id && ` · ${p.wompi_transaction_id}`}
+      </p>
+    </section>
+  </div>
+
+  <section class="mt-10 space-y-8 border-t-2 border-negro pt-6">
+    <h2 class="text-3xl">Acciones</h2>
+
+    {p.status === 'paid' && (
+      <form method="post" action={`/api/admin/orders/${p.id}`} class="space-y-3">
+        <input type="hidden" name="accion" value="enviar" />
+        <label class="etiqueta block">Transportadora<input name="carrier" required maxlength="60" class={campo} /></label>
+        <label class="etiqueta block">Número de guía<input name="tracking" required maxlength="60" class={campo} /></label>
+        <button class="btn" type="submit">Marcar como enviado</button>
+      </form>
+    )}
+
+    {p.status === 'shipped' && (
+      <form method="post" action={`/api/admin/orders/${p.id}`}>
+        <input type="hidden" name="accion" value="entregar" />
+        <button class="btn" type="submit">Marcar como entregado</button>
+      </form>
+    )}
+
+    <form method="post" action={`/api/admin/orders/${p.id}`} class="space-y-3">
+      <input type="hidden" name="accion" value="nota" />
+      <label class="etiqueta block">Nota interna
+        <textarea name="notes" rows="3" maxlength="1000" class={campo}>{p.notes ?? ''}</textarea>
+      </label>
+      <button class="btn" type="submit">Guardar nota</button>
+    </form>
+
+    {(p.status === 'pending' || p.status === 'paid') && (
+      <form method="post" action={`/api/admin/orders/${p.id}`} class="space-y-2">
+        <input type="hidden" name="accion" value="cancelar" />
+        <label class="flex items-center gap-2"><input type="checkbox" name="confirmar" required /> Confirmo que quiero cancelar este pedido</label>
+        {p.status === 'paid' && <p class="text-sm text-texto-suave">Si ya se pagó, el reembolso se hace desde Wompi y el stock se devuelve a mano en Productos.</p>}
+        <button class="btn" type="submit">Cancelar pedido</button>
+      </form>
+    )}
+  </section>
+</Admin>
