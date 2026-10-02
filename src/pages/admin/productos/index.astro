@@ -1,0 +1,58 @@
+---
+import Admin from '../../../layouts/Admin.astro';
+import { formatCOP } from '../../../lib/money';
+
+export const prerender = false;
+
+const { data, error } = await Astro.locals.supabase!
+  .from('products')
+  .select('id, slug, name, price_cop, status, drop_number, category, product_colors(front_path, position), product_variants(stock)')
+  .order('sort_order');
+if (error) throw new Error(`No se pudo leer los productos: ${error.message}`);
+
+const base = import.meta.env.PUBLIC_SUPABASE_URL;
+const foto = (p?: string) => (!p ? '' : p.startsWith('/') || p.startsWith('http') ? p : `${base}/storage/v1/object/public/products/${p}`);
+const estados: Record<string, string> = { draft: 'Borrador', active: 'Activo', archived: 'Archivado' };
+
+const lista = (data ?? []).map((p: any) => ({
+  ...p,
+  foto: foto([...p.product_colors].sort((a: any, b: any) => a.position - b.position)[0]?.front_path),
+  stock: p.product_variants.reduce((n: number, v: any) => n + v.stock, 0),
+}));
+const activos = lista.filter((p) => p.status === 'active').length;
+---
+
+<Admin title="Productos" active="productos">
+  <div class="flex flex-wrap items-end justify-between gap-4">
+    <div>
+      <h1 class="text-6xl md:text-7xl">Productos</h1>
+      <p class="mt-2 text-texto-suave">
+        {activos} de 15 activos{activos > 15 && ' · pasaste el límite recomendado'}
+      </p>
+    </div>
+    <a href="/admin/productos/nuevo" class="btn">Nuevo producto</a>
+  </div>
+
+  {lista.length === 0 && <p class="mt-10 text-texto-suave">Todavía no hay productos.</p>}
+
+  <ul class="mt-8 divide-y divide-linea border-y-2 border-negro">
+    {lista.map((p) => (
+      <li>
+        <a href={`/admin/productos/${p.id}`} class="flex items-center gap-4 py-4 hover:bg-tile md:px-3">
+          <div class="size-16 shrink-0 overflow-hidden rounded-md bg-tile md:size-20">
+            {p.foto && <img src={p.foto} alt="" class="size-full object-cover" loading="lazy" />}
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-bold">{p.name}</p>
+            <p class="text-sm text-texto-suave">{formatCOP(p.price_cop)} · Drop {p.drop_number} · {p.stock} en stock</p>
+          </div>
+          <span
+            class:list={[
+              'etiqueta rounded-full border-2 px-3 py-1',
+              p.status === 'active' ? 'border-oliva text-oliva' : p.status === 'draft' ? 'border-cafe text-cafe' : 'border-linea text-texto-suave',
+            ]}>{estados[p.status]}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Admin>

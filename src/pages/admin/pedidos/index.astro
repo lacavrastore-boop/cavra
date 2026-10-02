@@ -1,0 +1,60 @@
+---
+import Admin from '../../../layouts/Admin.astro';
+import { formatCOP } from '../../../lib/money';
+import { ESTADOS_PEDIDO, claseEstado, fechaCO } from '../../../lib/orders';
+
+export const prerender = false;
+
+const estado = Astro.url.searchParams.get('estado') ?? '';
+// Se limpia el texto para que no rompa el filtro .or() de PostgREST
+const q = (Astro.url.searchParams.get('q') ?? '').replace(/[^\p{L}\p{N}@._\- ]/gu, '').trim().slice(0, 60);
+
+let query = Astro.locals.supabase!
+  .from('orders')
+  .select('id, reference, status, customer_name, customer_email, total_cop, created_at')
+  .order('created_at', { ascending: false })
+  .limit(100);
+if (estado in ESTADOS_PEDIDO) query = query.eq('status', estado);
+if (q) query = query.or(`reference.ilike.%${q}%,customer_name.ilike.%${q}%,customer_email.ilike.%${q}%`);
+const { data, error } = await query;
+if (error) throw new Error(`No se pudieron leer los pedidos: ${error.message}`);
+const pedidos = data ?? [];
+
+const filtros = [['', 'Todos'], ['paid', 'Por enviar'], ['shipped', 'Enviados'], ['delivered', 'Entregados'], ['pending', 'Pendientes'], ['cancelled', 'Cancelados'], ['failed', 'Fallidos']];
+---
+
+<Admin title="Pedidos" active="pedidos">
+  <h1 class="text-6xl md:text-7xl">Pedidos</h1>
+
+  <nav class="mt-6 flex flex-wrap gap-2" aria-label="Filtrar por estado">
+    {filtros.map(([v, t]) => (
+      <a
+        href={`/admin/pedidos?${new URLSearchParams({ ...(v ? { estado: v } : {}), ...(q ? { q } : {}) })}`}
+        class:list={['etiqueta rounded-full border-2 px-3 py-1', estado === v ? 'border-negro bg-negro text-papel' : 'border-linea']}
+        aria-current={estado === v ? 'page' : undefined}>{t}</a>
+    ))}
+  </nav>
+
+  <form method="get" class="mt-4 flex gap-2">
+    {estado && <input type="hidden" name="estado" value={estado} />}
+    <input type="search" name="q" value={q} placeholder="Referencia, nombre o correo" class="min-w-0 flex-1 rounded-md border-2 border-negro bg-blanco px-3 py-2" />
+    <button class="btn" type="submit">Buscar</button>
+  </form>
+
+  {pedidos.length === 0 && <p class="mt-10 text-texto-suave">No hay pedidos con ese filtro.</p>}
+
+  <ul class="mt-8 divide-y divide-linea border-y-2 border-negro">
+    {pedidos.map((p) => (
+      <li>
+        <a href={`/admin/pedidos/${p.id}`} class="flex items-center gap-4 py-4 hover:bg-tile md:px-3">
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-bold">{p.customer_name}</p>
+            <p class="truncate text-sm text-texto-suave">{p.reference} · {fechaCO(p.created_at)}</p>
+          </div>
+          <p class="font-bold">{formatCOP(p.total_cop)}</p>
+          <span class:list={['etiqueta hidden rounded-full border-2 px-3 py-1 sm:inline-block', claseEstado(p.status)]}>{ESTADOS_PEDIDO[p.status]}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</Admin>

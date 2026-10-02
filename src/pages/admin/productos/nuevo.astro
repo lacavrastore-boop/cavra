@@ -1,0 +1,17 @@
+---
+import Admin from '../../../layouts/Admin.astro';
+import ProductEditor from '../../../components/islands/ProductEditor';
+
+export const prerender = false;
+
+const vacio = {
+  id: null, slug: '', name: '', tagline: '', description: '', price_cop: 0, status: 'draft' as const,
+  sort_order: 0, category: 'camisetas' as const, drop_number: 1, details: [], life_path: '', colors: [], variants: [],
+};
+---
+
+<Admin title="Nuevo producto" active="productos">
+  <a href="/admin/productos" class="etiqueta text-texto-suave hover:text-negro">← Productos</a>
+  <h1 class="mb-10 mt-3 text-6xl md:text-7xl">Nuevo producto</h1>
+  <ProductEditor client:load initial={vacio} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL} />
+</Admin>

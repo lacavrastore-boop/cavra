@@ -1,0 +1,52 @@
+---
+import '@fontsource/bebas-neue/latin-400.css';
+import '@fontsource-variable/montserrat/wght.css';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  active?: 'inicio' | 'productos' | 'pedidos';
+}
+const { title, active } = Astro.props;
+const nav = [
+  { key: 'inicio', href: '/admin', label: 'Inicio' },
+  { key: 'productos', href: '/admin/productos', label: 'Productos' },
+  { key: 'pedidos', href: '/admin/pedidos', label: 'Pedidos' },
+] as const;
+---
+
+<!doctype html>
+<html lang="es-CO">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title} | Panel Cavra</title>
+  </head>
+  <body class="min-h-screen bg-papel">
+    <header class="border-b-2 border-negro bg-papel">
+      <div class="mx-auto flex max-w-[1200px] flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 md:px-8">
+        <a href="/admin" class="font-display text-3xl uppercase leading-none">Cavra · Panel</a>
+        <nav class="flex flex-1 flex-wrap gap-1" aria-label="Panel">
+          {nav.map((n) => (
+            <a
+              href={n.href}
+              aria-current={active === n.key ? 'page' : undefined}
+              class:list={[
+                'etiqueta inline-flex min-h-11 items-center rounded-full px-4',
+                active === n.key ? 'bg-negro text-papel' : 'hover:bg-tile',
+              ]}>{n.label}</a>
+          ))}
+        </nav>
+        <a href="/" class="etiqueta inline-flex min-h-11 items-center px-2 text-texto-suave hover:text-negro" target="_blank" rel="noopener">Ver tienda</a>
+        <form method="post" action="/api/admin/logout">
+          <button type="submit" class="etiqueta min-h-11 rounded-full px-4 hover:bg-tile">Salir</button>
+        </form>
+      </div>
+    </header>
+    <main class="mx-auto max-w-[1200px] px-4 py-8 md:px-8 md:py-10">
+      <slot />
+    </main>
+  </body>
+</html>
