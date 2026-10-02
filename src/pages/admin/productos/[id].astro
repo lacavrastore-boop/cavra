@@ -1,0 +1,42 @@
+---
+import Admin from '../../../layouts/Admin.astro';
+import ProductEditor from '../../../components/islands/ProductEditor';
+
+export const prerender = false;
+
+const id = Astro.params.id!;
+if (!/^[0-9a-f-]{36}$/i.test(id)) return new Response(null, { status: 404 });
+
+const { data: p, error } = await Astro.locals.supabase!
+  .from('products')
+  .select('*, product_colors(*), product_variants(*)')
+  .eq('id', id)
+  .maybeSingle();
+if (error) throw new Error(`No se pudo leer el producto: ${error.message}`);
+if (!p) return new Response(null, { status: 404 });
+
+const initial = {
+  id: p.id,
+  slug: p.slug,
+  name: p.name,
+  tagline: p.tagline ?? '',
+  description: p.description ?? '',
+  price_cop: p.price_cop,
+  status: p.status,
+  sort_order: p.sort_order,
+  category: p.category,
+  drop_number: p.drop_number,
+  details: p.details ?? [],
+  life_path: p.life_path ?? '',
+  colors: [...p.product_colors]
+    .sort((a: any, b: any) => a.position - b.position)
+    .map((c: any) => ({ key: c.key, name: c.name, hex: c.hex, stage: c.stage, stage_dark: c.stage_dark, front_path: c.front_path, back_path: c.back_path ?? '' })),
+  variants: p.product_variants.map((v: any) => ({ size: v.size, color: v.color, stock: v.stock, position: v.position })),
+};
+---
+
+<Admin title={p.name} active="productos">
+  <a href="/admin/productos" class="etiqueta text-texto-suave hover:text-negro">← Productos</a>
+  <h1 class="mb-10 mt-3 text-6xl md:text-7xl">{p.name}</h1>
+  <ProductEditor client:load initial={initial} supabaseUrl={import.meta.env.PUBLIC_SUPABASE_URL} />
+</Admin>
