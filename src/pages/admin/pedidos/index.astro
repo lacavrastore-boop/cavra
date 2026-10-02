@@ -1,7 +1,7 @@
 ---
 import Admin from '../../../layouts/Admin.astro';
 import { formatCOP } from '../../../lib/money';
-import { ESTADOS_PEDIDO, claseEstado, fechaCO } from '../../../lib/orders';
+import { ESTADOS_PEDIDO, claseEstado, fechaCO, numeroPedido } from '../../../lib/orders';
 
 export const prerender = false;
 
@@ -11,11 +11,11 @@ const q = (Astro.url.searchParams.get('q') ?? '').replace(/[^\p{L}\p{N}@._\- ]/g
 
 let query = Astro.locals.supabase!
   .from('orders')
-  .select('id, reference, status, customer_name, customer_email, total_cop, created_at')
+  .select('id, reference, order_number, status, customer_name, customer_email, total_cop, created_at')
   .order('created_at', { ascending: false })
   .limit(100);
 if (estado in ESTADOS_PEDIDO) query = query.eq('status', estado);
-if (q) query = query.or(`reference.ilike.%${q}%,customer_name.ilike.%${q}%,customer_email.ilike.%${q}%`);
+if (q) query = query.or(`reference.ilike.%${q}%,order_number.ilike.%${q}%,customer_name.ilike.%${q}%,customer_email.ilike.%${q}%`);
 const { data, error } = await query;
 if (error) throw new Error(`No se pudieron leer los pedidos: ${error.message}`);
 const pedidos = data ?? [];
@@ -49,7 +49,7 @@ const filtros = [['', 'Todos'], ['paid', 'Por enviar'], ['shipped', 'Enviados'],
         <a href={`/admin/pedidos/${p.id}`} class="flex items-center gap-4 py-4 hover:bg-tile md:px-3">
           <div class="min-w-0 flex-1">
             <p class="truncate font-bold">{p.customer_name}</p>
-            <p class="truncate text-sm text-texto-suave">{p.reference} · {fechaCO(p.created_at)}</p>
+            <p class="truncate text-sm text-texto-suave">{numeroPedido(p)} · {fechaCO(p.created_at)}</p>
           </div>
           <p class="font-bold">{formatCOP(p.total_cop)}</p>
           <span class:list={['etiqueta hidden rounded-full border-2 px-3 py-1 sm:inline-block', claseEstado(p.status)]}>{ESTADOS_PEDIDO[p.status]}</span>

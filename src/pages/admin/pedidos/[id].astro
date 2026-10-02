@@ -1,7 +1,7 @@
 ---
 import Admin from '../../../layouts/Admin.astro';
 import { formatCOP } from '../../../lib/money';
-import { ESTADOS_PEDIDO, claseEstado, fechaCO } from '../../../lib/orders';
+import { ESTADOS_PEDIDO, claseEstado, fechaCO, numeroPedido } from '../../../lib/orders';
 
 export const prerender = false;
 
@@ -21,13 +21,13 @@ const ok = Astro.url.searchParams.get('ok');
 const campo = 'w-full rounded-md border-2 border-negro bg-blanco px-3 py-2';
 ---
 
-<Admin title={`Pedido ${p.reference}`} active="pedidos">
+<Admin title={`Pedido ${numeroPedido(p)}`} active="pedidos">
   <a href="/admin/pedidos" class="etiqueta text-texto-suave">← Pedidos</a>
   <div class="mt-3 flex flex-wrap items-center gap-3">
-    <h1 class="text-5xl md:text-6xl">{p.reference}</h1>
+    <h1 class="text-5xl md:text-6xl">{numeroPedido(p)}</h1>
     <span class:list={['etiqueta rounded-full border-2 px-3 py-1', claseEstado(p.status)]}>{ESTADOS_PEDIDO[p.status]}</span>
   </div>
-  <p class="mt-2 text-texto-suave">Creado {fechaCO(p.created_at)}{p.paid_at && ` · Pagado ${fechaCO(p.paid_at)}`}</p>
+  <p class="mt-2 text-texto-suave">Creado {fechaCO(p.created_at)}{p.order_number && ` · Ref. de pago ${p.reference}`}{p.paid_at && ` · Pagado ${fechaCO(p.paid_at)}`}</p>
 
   {aviso && <p role="alert" class="mt-4 rounded-md border-2 border-oxido p-3 text-oxido">{aviso}</p>}
   {ok && <p role="status" class="mt-4 rounded-md border-2 border-oliva p-3 text-oliva">Listo, se guardó el cambio.</p>}
