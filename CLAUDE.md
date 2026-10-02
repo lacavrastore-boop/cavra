@@ -38,10 +38,11 @@ Astro + @astrojs/react (islas) + Tailwind v4 + shadcn/ui + framer-motion + Supab
 - Agregar componentes shadcn: `npx shadcn@latest add <componente>`
 
 ## Estado
-- Fase 0 (base) lista. Pendiente: adaptador de despliegue (hosting sin decidir).
+- Fase 0 (base) lista. Hosting: Cloudflare (Workers, desplegado desde GitHub, dominio cavra.store con DNS en Cloudflare). Adaptador `@astrojs/cloudflare` instalado.
 - Fase 1 (marca) lista: PRODUCT.md, docs/02 y assets en public/brand/.
 - Front v2 (decisión del dueño: front antes que base de datos). Fondo claro (crema claro #FBF5EE), hero con la cabra que sigue el cursor (ojos y cabeza), bento "Lo nuevo", cards con segunda foto al hover, producto tipo escenario (prenda al frente, colores desenfocados atrás, giro frente/espalda), carrito en cajón (localStorage, sin pago).
-- Datos de mentira en `src/data/products.ts`. Fotos en `public/img/` generadas con IA (ComfyUI, Z-Image Turbo) como referencia: reemplazar por fotos reales antes de lanzar. Workflows e imágenes originales en `.comfy/` (fuera de git).
+- Fase 2 (BD) lista: Supabase proyecto `cavra` (São Paulo). SQL en `supabase/` (002 amplía el esquema del doc 03; seed-drop-1.sql = datos de mentira). El catálogo se lee con `src/lib/catalog.ts`; las páginas de inicio, tienda y producto se renderizan bajo demanda (`prerender = false`). Variables PUBLIC_SUPABASE_URL y PUBLIC_SUPABASE_ANON_KEY: en `.env` local y como variables de BUILD en Cloudflare.
+- Tipos y constantes del catálogo en `src/data/products.ts`; datos de mentira solo en `src/data/products.mock.ts` (para regenerar el seed). Fotos en `public/img/` generadas con IA (ComfyUI, Z-Image Turbo) como referencia: reemplazar por fotos reales antes de lanzar. Workflows e imágenes originales en `.comfy/` (fuera de git).
 - El color de acento de botones sigue pendiente (hoy negro).
 
 - Hero v4 (actual): cabra en vivo sin cortes. La cara gira completa sobre el cuello y la zona del cuello se dobla en 30 franjas diagonales (clip-path) paralelas a la mandíbula; el cuerpo queda quieto. Pupilas y parpadeo encima. Imagen: `public/img/cabra-base.webp`.

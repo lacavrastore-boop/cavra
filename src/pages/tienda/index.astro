@@ -1,9 +1,12 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ProductCard from '../../components/ProductCard.astro';
-import { activeProducts, CATEGORIES, CURRENT_DROP } from '../../data/products';
+import { CATEGORIES, CURRENT_DROP } from '../../data/products';
+import { activeProducts } from '../../lib/catalog';
 
-const lista = activeProducts();
+export const prerender = false;
+
+const lista = await activeProducts();
 const cats = CATEGORIES.filter((c) => lista.some((p) => p.category === c.key));
 ---
 

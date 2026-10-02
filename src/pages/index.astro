@@ -4,9 +4,11 @@ import HeroCabra from '../components/islands/HeroCabra';
 import Bento from '../components/Bento.astro';
 import ProductCarousel from '../components/islands/ProductCarousel';
 import Collage from '../components/Collage.astro';
-import { activeProducts } from '../data/products';
+import { activeProducts } from '../lib/catalog';
 
-const items = activeProducts().map((p) => ({
+export const prerender = false;
+
+const items = (await activeProducts()).map((p) => ({
   slug: p.slug,
   name: p.name,
   tagline: p.tagline,

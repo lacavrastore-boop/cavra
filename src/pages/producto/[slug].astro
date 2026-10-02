@@ -2,14 +2,13 @@
 import Base from '../../layouts/Base.astro';
 import ProductStage from '../../components/islands/ProductStage';
 import ProductCard from '../../components/ProductCard.astro';
-import { activeProducts, getProduct } from '../../data/products';
+import { activeProducts, getProduct } from '../../lib/catalog';
 
-export function getStaticPaths() {
-  return activeProducts().map((p) => ({ params: { slug: p.slug } }));
-}
+export const prerender = false;
 
-const product = getProduct(Astro.params.slug!)!;
-const otros = activeProducts().filter((p) => p.slug !== product.slug).slice(0, 3);
+const product = await getProduct(Astro.params.slug!);
+if (!product) return new Response(null, { status: 404, statusText: 'Not Found' });
+const otros = (await activeProducts()).filter((p) => p.slug !== product.slug).slice(0, 3);
 ---
 
 <Base title={`${product.name} | Cavra`} description={product.description}>

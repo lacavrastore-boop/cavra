@@ -27,3 +27,8 @@ Thumbs.db
 # herramientas de diseño (se reinstalan con skills-lock.json)
 .claude/
 .impeccable/
+
+# Cloudflare / wrangler (secretos locales y estado)
+.dev.vars
+.dev.vars.*
+.wrangler/
