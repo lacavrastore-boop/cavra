@@ -191,36 +191,10 @@
   letter-spacing: 0.18em;
   text-transform: uppercase;
 }
-/* Checkout: bordes gruesos y sombra dura, como pegatina */
-@utility sombra-dura {
-  box-shadow: 6px 6px 0 var(--negro);
-}
-/* Tiquete de papel con borde dentado abajo. La sombra va por filter en el contenedor para seguir el borde. */
-@utility tiquete {
-  position: relative;
-  background: var(--blanco);
-  &::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: -14px;
-    height: 14px;
-    background:
-      linear-gradient(135deg, var(--blanco) 25%, transparent 25%) -7px 0 / 14px 14px,
-      linear-gradient(225deg, var(--blanco) 25%, transparent 25%) -7px 0 / 14px 14px;
-  }
-}
 @keyframes entra {
   from {
     opacity: 0;
     transform: translate3d(0, 14px, 0);
-  }
-}
-@keyframes tiquete-entra {
-  from {
-    opacity: 0;
-    transform: translate3d(0, -18px, 0) rotate(-4deg);
   }
 }
 @utility contorno {
