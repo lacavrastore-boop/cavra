@@ -168,14 +168,15 @@
   }
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background: var(--cafe);
-      border-color: var(--cafe);
+      background: var(--crema);
+      border-color: var(--negro);
+      color: var(--negro);
     }
   }
 }
 /* Sistema de botones: 2 variantes según el fondo donde viven.
-   - btn (negro)      → sobre fondos claros. Hover: café.
-   - btn-claro (papel) → sobre fondos oscuros o fotos. Hover: arena.
+   - btn (negro)      → sobre fondos claros. Hover: crema con borde negro.
+   - btn-claro (papel) → sobre fondos oscuros o fotos. Hover: transparente con borde papel.
    - btn-ghost        → contorno. Hover: se llena de negro.
    - btn-icono / btn-icono-claro → lo mismo, redondos (solo icono). */
 @utility btn-claro {
@@ -184,8 +185,9 @@
   border-color: var(--papel);
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background: var(--arena);
-      border-color: var(--arena);
+      background: transparent;
+      border-color: var(--papel);
+      color: var(--papel);
     }
   }
 }
@@ -204,7 +206,9 @@
   }
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background: var(--cafe);
+      background: var(--crema);
+      color: var(--negro);
+      box-shadow: inset 0 0 0 2px var(--negro);
     }
   }
 }
