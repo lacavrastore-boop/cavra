@@ -45,6 +45,11 @@ const cats = CATEGORIES.filter((c) => lista.some((p) => p.category === c.key));
     text-transform: uppercase;
     transition: transform 150ms var(--ease-out), background-color 200ms var(--ease-out), color 200ms var(--ease-out);
   }
+  @media (hover: hover) and (pointer: fine) {
+    .filtro:hover:not([aria-pressed='true']) {
+      background: var(--tile);
+    }
+  }
   .filtro:active {
     transform: scale(0.96);
   }

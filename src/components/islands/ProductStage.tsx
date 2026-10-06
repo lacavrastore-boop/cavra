@@ -342,7 +342,7 @@ export default function ProductStage({ product }: { product: Product }) {
                 aria-label="Menos"
                 disabled={qty <= 1}
                 onClick={() => setQty((q) => Math.max(1, q - 1))}
-                className="grid size-12 place-items-center transition-transform active:scale-90 disabled:opacity-30"
+                className={cn('btn-icono-ghost size-12', dark && 'text-papel hover:text-negro')}
               >
                 <Minus className="size-4" />
               </button>
@@ -354,7 +354,7 @@ export default function ProductStage({ product }: { product: Product }) {
                 aria-label="Más"
                 disabled={!size || qty >= stock}
                 onClick={() => setQty((q) => Math.min(stock, q + 1))}
-                className="grid size-12 place-items-center transition-transform active:scale-90 disabled:opacity-30"
+                className={cn('btn-icono-ghost size-12', dark && 'text-papel hover:text-negro')}
               >
                 <Plus className="size-4" />
               </button>

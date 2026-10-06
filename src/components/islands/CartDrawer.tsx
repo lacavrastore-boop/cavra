@@ -68,7 +68,7 @@ export default function CartDrawer() {
               <h2 className="text-4xl">Tu carrito</h2>
               <button
                 onClick={() => setOpen(false)}
-                className="grid size-11 place-items-center rounded-full transition-transform duration-150 hover:bg-tile active:scale-95"
+                className="btn-icono-ghost size-11"
                 aria-label="Cerrar"
                 autoFocus
               >
@@ -100,7 +100,7 @@ export default function CartDrawer() {
                         <div className="mt-auto flex items-center justify-between pt-3">
                           <div className="flex items-center rounded-full border border-linea">
                             <button
-                              className="grid size-10 place-items-center active:scale-90"
+                              className="btn-icono-ghost size-10"
                               aria-label="Quitar una unidad"
                               onClick={() => setQty(i, i.qty - 1)}
                             >
@@ -108,7 +108,7 @@ export default function CartDrawer() {
                             </button>
                             <span className="w-6 text-center tabular-nums">{i.qty}</span>
                             <button
-                              className="grid size-10 place-items-center active:scale-90 disabled:opacity-30"
+                              className="btn-icono-ghost size-10"
                               aria-label="Agregar una unidad"
                               disabled={i.qty >= i.maxQty}
                               onClick={() => setQty(i, i.qty + 1)}
