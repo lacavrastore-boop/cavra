@@ -21,7 +21,7 @@ const links = [
           <a
             href={l.href}
             aria-current={pathname === l.href ? 'page' : undefined}
-            class="etiqueta relative rounded-full px-5 py-3 transition-colors duration-200 hover:bg-cafe aria-[current=page]:bg-papel aria-[current=page]:text-negro"
+            class="etiqueta relative rounded-full px-5 py-3 transition-colors duration-200 hover:bg-papel hover:text-negro aria-[current=page]:bg-papel aria-[current=page]:text-negro"
           >
             {l.label}
             {l.nuevo && (
