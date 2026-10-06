@@ -363,7 +363,7 @@ export default function ProductStage({ product }: { product: Product }) {
               type="button"
               onClick={add}
               disabled={!size || stock === 0}
-              className={cn('btn flex-1 overflow-hidden', dark && 'border-papel bg-papel text-negro')}
+              className={cn('btn flex-1 overflow-hidden', dark && 'btn-claro')}
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span

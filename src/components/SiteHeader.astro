@@ -21,7 +21,7 @@ const links = [
           <a
             href={l.href}
             aria-current={pathname === l.href ? 'page' : undefined}
-            class="etiqueta relative rounded-full px-5 py-3 transition-colors duration-200 hover:bg-papel hover:text-negro aria-[current=page]:bg-papel aria-[current=page]:text-negro"
+            class="etiqueta relative rounded-full px-5 py-3 transition-colors duration-200 hover:bg-cafe aria-[current=page]:bg-papel aria-[current=page]:text-negro"
           >
             {l.label}
             {l.nuevo && (
@@ -38,7 +38,7 @@ const links = [
       <button
         type="button"
         data-open-cart
-        class="relative grid size-12 place-items-center rounded-full bg-negro text-papel transition duration-150 hover:bg-papel hover:text-negro hover:ring-2 hover:ring-inset hover:ring-negro active:scale-95"
+        class="btn-icono relative"
         aria-label="Abrir carrito"
       >
         <svg class="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg>

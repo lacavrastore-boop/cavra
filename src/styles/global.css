@@ -173,6 +173,41 @@
     }
   }
 }
+/* Sistema de botones: 2 variantes según el fondo donde viven.
+   - btn (negro)      → sobre fondos claros. Hover: café.
+   - btn-claro (papel) → sobre fondos oscuros o fotos. Hover: arena.
+   - btn-ghost        → contorno. Hover: se llena de negro.
+   - btn-icono / btn-icono-claro → lo mismo, redondos (solo icono). */
+@utility btn-claro {
+  background: var(--papel);
+  color: var(--negro);
+  border-color: var(--papel);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: var(--arena);
+      border-color: var(--arena);
+    }
+  }
+}
+@utility btn-icono {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--negro);
+  color: var(--papel);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 200ms var(--ease-out);
+  &:active {
+    transform: scale(0.95);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: var(--cafe);
+    }
+  }
+}
 @utility btn-ghost {
   background: transparent;
   color: var(--negro);
