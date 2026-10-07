@@ -118,4 +118,21 @@ export const products: Product[] = [
     life: '/img/life/cap.webp',
     details: ['Seis paneles', 'Visera curva', 'Correa ajustable', 'Bordado frontal'],
   },
+  {
+    slug: 'camiseta-pezuna',
+    name: 'Camiseta Pezuña',
+    tagline: 'La pezuña al pecho, la cabra atrás.',
+    description:
+      'Camiseta de algodón pesado, corte cuadrado y cuello grueso. Pezuña en relieve mate al pecho y la cabra con el logo en la espalda.',
+    price_cop: 89900,
+    status: 'active',
+    drop: 1,
+    sort_order: 5,
+    category: 'camisetas',
+    colors: [color('negro', `${P}/tee_front_negro_pezuna.webp`, `${P}/tee_back_negro_pezuna.webp`)],
+    sizes: ['S', 'M', 'L', 'XL'],
+    variants: stockGrid(['S', 'M', 'L', 'XL'], ['negro']),
+    life: '/img/life/tee.webp',
+    details: ['Algodón peinado de alto gramaje', 'Corte cuadrado (boxy)', 'Cuello acanalado grueso', 'Pezuña en el pecho y estampado en espalda'],
+  },
 ];
