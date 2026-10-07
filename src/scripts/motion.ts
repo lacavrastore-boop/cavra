@@ -44,7 +44,8 @@ function frame() {
     const down = y > lastY && y > 120;
     header.dataset.hidden = String(down);
     // Blur solo si no estamos arriba y la barra está visible (subiendo)
-    header.dataset.scrolled = String(y > 8 && !down);
+    if (y !== lastY) header.dataset.scrolled = String(y > 8 && y < lastY);
+    if (y <= 8) header.dataset.scrolled = 'false';
     lastY = y;
   }
   if (reduce) return;
