@@ -50,7 +50,9 @@ export default function ProductStage({ product }: { product: Product }) {
   const rotX = useTransform(tX, (v) => (reduce ? 0 : v));
   const shadowX = useTransform(rotY, (v) => Math.sin((v * Math.PI) / 180) * -24);
   const startFlip = useRef(0);
-  const hasBack = Boolean(color.back);
+  // Foto de detalle (no es una prenda recortada): se muestra con fundido en vez de girar la prenda
+  const hasDetail = Boolean(color.back) && /detalle/.test(color.back ?? '');
+  const hasBack = Boolean(color.back) && !hasDetail;
 
   useEffect(() => {
     flip.set(back && hasBack ? 180 : 0);
@@ -210,7 +212,7 @@ export default function ProductStage({ product }: { product: Product }) {
                     className="absolute inset-0 h-full w-full object-contain"
                     style={{ backfaceVisibility: 'hidden', filter: 'drop-shadow(0 40px 38px rgba(0,0,0,0.35))' }}
                   />
-                  {color.back && (
+                  {color.back && hasBack && (
                     <img
                       src={color.back}
                       alt={`${product.name} en ${color.name.toLowerCase()}, espalda`}
@@ -224,6 +226,22 @@ export default function ProductStage({ product }: { product: Product }) {
                     />
                   )}
                 </motion.div>
+                {hasDetail && (
+                  <motion.div
+                    className="pointer-events-none absolute inset-0 grid place-items-center p-2"
+                    initial={false}
+                    animate={{ opacity: back ? 1 : 0 }}
+                    transition={{ duration: reduce ? 0 : 0.35, ease: EASE }}
+                    aria-hidden={!back}
+                  >
+                    <img
+                      src={color.back}
+                      alt={`${product.name} en ${color.name.toLowerCase()}, detalle del logo`}
+                      draggable={false}
+                      className="max-h-full max-w-full rounded-2xl shadow-[0_30px_60px_-20px_rgba(0,0,0,0.5)]"
+                    />
+                  </motion.div>
+                )}
               </motion.div>
             </AnimatePresence>
             {/* sombra en el piso */}
@@ -236,15 +254,15 @@ export default function ProductStage({ product }: { product: Product }) {
 
           <button
             type="button"
-            onClick={() => (hasBack ? setBack((b) => !b) : undefined)}
-            disabled={!hasBack}
+            onClick={() => (color.back ? setBack((b) => !b) : undefined)}
+            disabled={!color.back}
             className={cn(
               'etiqueta absolute bottom-0 left-0 z-20 flex items-center gap-2 rounded-full px-4 py-3 transition-transform duration-150 active:scale-95 disabled:opacity-0',
               dark ? 'bg-papel/15 text-papel hover:bg-papel/25' : 'bg-negro/10 hover:bg-negro/15',
             )}
           >
             <Rotate3d className="size-4" aria-hidden="true" />
-            {back ? 'Ver frente' : 'Arrastra para girar'}
+            {back ? 'Ver frente' : hasDetail ? 'Ver detalle' : 'Arrastra para girar'}
           </button>
         </div>
 

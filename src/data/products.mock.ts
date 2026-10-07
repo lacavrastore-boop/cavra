@@ -65,7 +65,7 @@ export const products: Product[] = [
     sort_order: 2,
     category: 'camisetas',
     colors: [
-      color('negro', `${P}/tee_front_negro.webp`, `${P}/tee_back_negro.webp`),
+      color('negro', `${P}/tee_front_negro.webp`, `${P}/tee_detalle_negro.webp`),
       color('crema', `${P}/tee_front_crema.webp`, `${P}/tee_back_crema.webp`),
       color('oliva', `${P}/tee_front_oliva.webp`, `${P}/tee_back_oliva.webp`),
     ],
