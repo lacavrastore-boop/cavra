@@ -76,8 +76,8 @@ export default function ProductStage({ product }: { product: Product }) {
   const stageRef = useRef<HTMLDivElement>(null);
 
   // Lupa: al pasar el mouse sobre la prenda se amplía la zona bajo el cursor
-  const ZOOM = 2.4;
-  const LENS = 190;
+  const ZOOM = 2.6;
+  const LENS = 380;
   const garmentRef = useRef<HTMLDivElement>(null);
   const lensRef = useRef<HTMLDivElement>(null);
   const natural = useRef({ w: 0, h: 0 });
