@@ -168,8 +168,70 @@
   }
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background: var(--cafe);
-      border-color: var(--cafe);
+      background: var(--papel);
+      border-color: var(--negro);
+      color: var(--negro);
+    }
+  }
+}
+/* Sistema de botones: 2 variantes según el fondo donde viven.
+   - btn (negro)      → sobre fondos claros. Hover: fondo del sitio (papel) con borde negro.
+   - btn-claro (papel) → sobre fondos oscuros o fotos. Hover: transparente con borde papel.
+   - btn-ghost        → contorno. Hover: se llena de negro.
+   - btn-icono / btn-icono-ghost → redondos (solo icono), relleno negro o sin relleno. */
+@utility btn-claro {
+  background: var(--papel);
+  color: var(--negro);
+  border-color: var(--papel);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: transparent;
+      border-color: var(--papel);
+      color: var(--papel);
+    }
+  }
+}
+@utility btn-icono {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  background: var(--negro);
+  color: var(--papel);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 200ms var(--ease-out);
+  &:active {
+    transform: scale(0.95);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: var(--papel);
+      color: var(--negro);
+      box-shadow: inset 0 0 0 2px var(--negro);
+    }
+  }
+}
+/* Icono sin relleno (cerrar, +/-): al pasar el mouse toma papel con borde negro */
+@utility btn-icono-ghost {
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--negro);
+  cursor: pointer;
+  transition: transform 160ms var(--ease-out), background-color 200ms var(--ease-out), box-shadow 200ms var(--ease-out);
+  &:active {
+    transform: scale(0.92);
+  }
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: var(--papel);
+      box-shadow: inset 0 0 0 2px var(--negro);
     }
   }
 }
@@ -190,6 +252,12 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+@keyframes entra {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
 }
 @utility contorno {
   -webkit-text-fill-color: transparent;

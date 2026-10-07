@@ -3,6 +3,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Minus, Plus, X } from 'lucide-react';
 import { cartCount, onCartChange, readCart, setQty, type CartItem } from '@/lib/cart';
 import { formatCOP } from '@/lib/money';
+import { SHIPPING_COP } from '@/lib/shipping';
 
 export default function CartDrawer() {
   const [open, setOpen] = useState(false);
@@ -67,7 +68,7 @@ export default function CartDrawer() {
               <h2 className="text-4xl">Tu carrito</h2>
               <button
                 onClick={() => setOpen(false)}
-                className="grid size-11 place-items-center rounded-full transition-transform duration-150 hover:bg-tile active:scale-95"
+                className="btn-icono-ghost size-11"
                 aria-label="Cerrar"
                 autoFocus
               >
@@ -88,8 +89,8 @@ export default function CartDrawer() {
                 <ul className="flex-1 divide-y divide-linea overflow-y-auto px-6">
                   {items.map((i) => (
                     <li key={`${i.slug}-${i.color}-${i.size}`} className="flex gap-4 py-5">
-                      <div className="grid size-24 shrink-0 place-items-center rounded-md bg-tile p-2">
-                        <img src={i.image} alt="" className="max-h-full w-auto" />
+                      <div className="relative size-24 shrink-0 rounded-md bg-tile overflow-hidden">
+                        <img src={i.image} alt="" className="absolute inset-2 size-[calc(100%-1rem)] object-contain" />
                       </div>
                       <div className="flex flex-1 flex-col">
                         <p className="etiqueta">{i.name}</p>
@@ -99,7 +100,7 @@ export default function CartDrawer() {
                         <div className="mt-auto flex items-center justify-between pt-3">
                           <div className="flex items-center rounded-full border border-linea">
                             <button
-                              className="grid size-10 place-items-center active:scale-90"
+                              className="btn-icono-ghost size-10"
                               aria-label="Quitar una unidad"
                               onClick={() => setQty(i, i.qty - 1)}
                             >
@@ -107,7 +108,7 @@ export default function CartDrawer() {
                             </button>
                             <span className="w-6 text-center tabular-nums">{i.qty}</span>
                             <button
-                              className="grid size-10 place-items-center active:scale-90 disabled:opacity-30"
+                              className="btn-icono-ghost size-10"
                               aria-label="Agregar una unidad"
                               disabled={i.qty >= i.maxQty}
                               onClick={() => setQty(i, i.qty + 1)}
@@ -128,12 +129,11 @@ export default function CartDrawer() {
                   </div>
                   <div className="mt-1 flex justify-between text-sm text-texto-suave">
                     <span>Envío</span>
-                    <span>Se calcula al pagar</span>
+                    <span className="tabular-nums">{formatCOP(SHIPPING_COP)}</span>
                   </div>
-                  <button className="btn mt-5 w-full" disabled>
-                    Pagar con Wompi
-                  </button>
-                  <p className="mt-3 text-center text-xs text-texto-suave">El pago se activa en la fase de checkout.</p>
+                  <a href="/checkout" className="btn mt-5 flex w-full">
+                    Ir a pagar
+                  </a>
                 </footer>
               </>
             )}

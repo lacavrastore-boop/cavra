@@ -18,3 +18,6 @@ export const claseEstado = (s: string) =>
 
 export const fechaCO = (iso: string) =>
   new Date(iso).toLocaleString('es-CO', { timeZone: 'America/Bogota', dateStyle: 'medium', timeStyle: 'short' });
+
+/** Número que ve el equipo: el consecutivo (CVR-0001) si ya se pagó; si no, la referencia técnica. */
+export const numeroPedido = (o: { order_number: string | null; reference: string }) => o.order_number ?? o.reference;
