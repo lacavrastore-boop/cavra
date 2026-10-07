@@ -74,6 +74,42 @@ export default function ProductStage({ product }: { product: Product }) {
     setBack(isBack);
   };
   const stageRef = useRef<HTMLDivElement>(null);
+
+  // Lupa: al pasar el mouse sobre la prenda se amplía la zona bajo el cursor
+  const ZOOM = 2.4;
+  const LENS = 190;
+  const garmentRef = useRef<HTMLDivElement>(null);
+  const lensRef = useRef<HTMLDivElement>(null);
+  const natural = useRef({ w: 0, h: 0 });
+  const zoomSrc = back && color.back ? color.back : color.front;
+  useEffect(() => {
+    natural.current = { w: 0, h: 0 };
+    const im = new Image();
+    im.onload = () => (natural.current = { w: im.naturalWidth, h: im.naturalHeight });
+    im.src = zoomSrc;
+  }, [zoomSrc]);
+  const hideLens = () => {
+    if (lensRef.current) lensRef.current.style.opacity = '0';
+  };
+  const onGarmentMove = (e: React.PointerEvent) => {
+    const box = garmentRef.current;
+    const lens = lensRef.current;
+    const { w, h } = natural.current;
+    if (e.pointerType !== 'mouse' || e.buttons !== 0 || !box || !lens || !w) return hideLens();
+    const r = box.getBoundingClientRect();
+    const sc = Math.min(r.width / w, r.height / h);
+    const dw = w * sc;
+    const dh = h * sc;
+    const ox = (r.width - dw) / 2;
+    const oy = (r.height - dh) / 2;
+    const x = e.clientX - r.left - ox;
+    const y = e.clientY - r.top - oy;
+    if (x < 0 || y < 0 || x > dw || y > dh) return hideLens();
+    lens.style.opacity = '1';
+    lens.style.transform = `translate3d(${e.clientX - r.left - LENS / 2}px, ${e.clientY - r.top - LENS / 2}px, 0)`;
+    lens.style.backgroundSize = `${dw * ZOOM}px ${dh * ZOOM}px`;
+    lens.style.backgroundPosition = `${LENS / 2 - x * ZOOM}px ${LENS / 2 - y * ZOOM}px`;
+  };
   const onStageMove = (e: React.PointerEvent) => {
     if (e.pointerType !== 'mouse' || !stageRef.current) return;
     const r = stageRef.current.getBoundingClientRect();
@@ -186,7 +222,14 @@ export default function ProductStage({ product }: { product: Product }) {
           </div>
 
           {/* Prenda al frente */}
-          <div className="absolute inset-y-0 left-0 right-[20%] z-10 lg:right-[14%]" style={{ perspective: 1400 }}>
+          <div
+            ref={garmentRef}
+            onPointerMove={onGarmentMove}
+            onPointerLeave={hideLens}
+            onPointerDown={hideLens}
+            className="absolute inset-y-0 left-0 right-[20%] z-10 lg:right-[14%]"
+            style={{ perspective: 1400 }}
+          >
             <AnimatePresence mode="popLayout" initial={false}>
               <motion.div
                 key={color.key}
@@ -226,6 +269,16 @@ export default function ProductStage({ product }: { product: Product }) {
                 </motion.div>
               </motion.div>
             </AnimatePresence>
+            {/* Lupa (solo mouse) */}
+            <div
+              ref={lensRef}
+              aria-hidden="true"
+              className={cn(
+                'pointer-events-none absolute left-0 top-0 z-30 hidden rounded-full opacity-0 shadow-[0_18px_40px_-10px_rgba(0,0,0,0.55)] transition-opacity duration-150 [@media(hover:hover)_and_(pointer:fine)]:block',
+                dark ? 'border-2 border-papel' : 'border-2 border-negro',
+              )}
+              style={{ width: LENS, height: LENS, backgroundImage: `url(${zoomSrc})`, backgroundRepeat: 'no-repeat', backgroundColor: color.stage }}
+            />
             {/* sombra en el piso */}
             <motion.div
               aria-hidden="true"
