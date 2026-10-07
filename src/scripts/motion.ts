@@ -43,6 +43,7 @@ function frame() {
   if (header) {
     const down = y > lastY && y > 120;
     header.dataset.hidden = String(down);
+    header.dataset.scrolled = String(y > 8);
     lastY = y;
   }
   if (reduce) return;
